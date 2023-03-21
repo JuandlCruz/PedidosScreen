@@ -7,15 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B62F2A829C9C79500DB2B87 /* SectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B62F2A729C9C79500DB2B87 /* SectionHeaderView.swift */; };
 		0B7A65A529C3118800A25AAC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7A65A429C3118800A25AAC /* AppDelegate.swift */; };
 		0B7A65A729C3118800A25AAC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7A65A629C3118800A25AAC /* SceneDelegate.swift */; };
 		0B7A65A929C3118800A25AAC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7A65A829C3118800A25AAC /* ViewController.swift */; };
 		0B7A65AC29C3118800A25AAC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B7A65AA29C3118800A25AAC /* Main.storyboard */; };
 		0B7A65AE29C3118A00A25AAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B7A65AD29C3118A00A25AAC /* Assets.xcassets */; };
 		0B7A65B129C3118A00A25AAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B7A65AF29C3118A00A25AAC /* LaunchScreen.storyboard */; };
+		0BF1D2D729C87E8400EE6C69 /* HistoricoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1D2D629C87E8400EE6C69 /* HistoricoTableViewCell.swift */; };
+		0BF1D2D929C884AE00EE6C69 /* HistoricoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1D2D829C884AE00EE6C69 /* HistoricoModel.swift */; };
+		0BF1D2DB29C88ABF00EE6C69 /* HistoricoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1D2DA29C88ABF00EE6C69 /* HistoricoTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B62F2A729C9C79500DB2B87 /* SectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderView.swift; sourceTree = "<group>"; };
 		0B7A65A129C3118800A25AAC /* PedidosScreen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PedidosScreen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B7A65A429C3118800A25AAC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0B7A65A629C3118800A25AAC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +29,9 @@
 		0B7A65AD29C3118A00A25AAC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0B7A65B029C3118A00A25AAC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0B7A65B229C3118A00A25AAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0BF1D2D629C87E8400EE6C69 /* HistoricoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricoTableViewCell.swift; sourceTree = "<group>"; };
+		0BF1D2D829C884AE00EE6C69 /* HistoricoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricoModel.swift; sourceTree = "<group>"; };
+		0BF1D2DA29C88ABF00EE6C69 /* HistoricoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricoTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +45,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B62F2AB29C9CDDB00DB2B87 /* Pedidos */ = {
+			isa = PBXGroup;
+			children = (
+				0B7A65A829C3118800A25AAC /* ViewController.swift */,
+			);
+			path = Pedidos;
+			sourceTree = "<group>";
+		};
 		0B7A659829C3118800A25AAC = {
 			isa = PBXGroup;
 			children = (
@@ -56,15 +72,27 @@
 		0B7A65A329C3118800A25AAC /* PedidosScreen */ = {
 			isa = PBXGroup;
 			children = (
+				0B62F2AB29C9CDDB00DB2B87 /* Pedidos */,
+				0BF1D2D529C87E6900EE6C69 /* Historico */,
 				0B7A65A429C3118800A25AAC /* AppDelegate.swift */,
 				0B7A65A629C3118800A25AAC /* SceneDelegate.swift */,
-				0B7A65A829C3118800A25AAC /* ViewController.swift */,
 				0B7A65AA29C3118800A25AAC /* Main.storyboard */,
 				0B7A65AD29C3118A00A25AAC /* Assets.xcassets */,
 				0B7A65AF29C3118A00A25AAC /* LaunchScreen.storyboard */,
 				0B7A65B229C3118A00A25AAC /* Info.plist */,
 			);
 			path = PedidosScreen;
+			sourceTree = "<group>";
+		};
+		0BF1D2D529C87E6900EE6C69 /* Historico */ = {
+			isa = PBXGroup;
+			children = (
+				0BF1D2D629C87E8400EE6C69 /* HistoricoTableViewCell.swift */,
+				0BF1D2D829C884AE00EE6C69 /* HistoricoModel.swift */,
+				0BF1D2DA29C88ABF00EE6C69 /* HistoricoTableViewController.swift */,
+				0B62F2A729C9C79500DB2B87 /* SectionHeaderView.swift */,
+			);
+			path = Historico;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,7 +166,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BF1D2DB29C88ABF00EE6C69 /* HistoricoTableViewController.swift in Sources */,
+				0BF1D2D929C884AE00EE6C69 /* HistoricoModel.swift in Sources */,
 				0B7A65A929C3118800A25AAC /* ViewController.swift in Sources */,
+				0BF1D2D729C87E8400EE6C69 /* HistoricoTableViewCell.swift in Sources */,
+				0B62F2A829C9C79500DB2B87 /* SectionHeaderView.swift in Sources */,
 				0B7A65A529C3118800A25AAC /* AppDelegate.swift in Sources */,
 				0B7A65A729C3118800A25AAC /* SceneDelegate.swift in Sources */,
 			);

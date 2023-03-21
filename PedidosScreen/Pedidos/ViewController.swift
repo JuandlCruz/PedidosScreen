@@ -8,7 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
+
     private enum Constants {
         static let todayLabelSize = 50.0
         static let ordersLabelSize = 16.0
