@@ -141,7 +141,7 @@ class HistoricoTableViewCell: UITableViewCell {
                     checkImageView.topAnchor.constraint(equalTo: row.topAnchor),
                     checkImageView.bottomAnchor.constraint(equalTo: row.bottomAnchor),
                     checkImageView.widthAnchor.constraint(equalToConstant: Constants.margenTabla32),
-                    checkImageView.heightAnchor.constraint(equalToConstant: Constants.margenTabla32)
+                    //checkImageView.heightAnchor.constraint(equalToConstant: Constants.margenTabla32)
                 ])
                 
                 stackView.addArrangedSubview(row)

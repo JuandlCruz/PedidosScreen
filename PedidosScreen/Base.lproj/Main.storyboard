@@ -15,8 +15,47 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="lTA-lt-XwI">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9qv-JE-mdY">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
+                                        <subviews>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="263" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Pus-hs-iHG">
+                                                <rect key="frame" x="16" y="9.6666666666666714" width="361" height="32"/>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <segments>
+                                                    <segment title="First"/>
+                                                    <segment title="Second"/>
+                                                    <segment title=""/>
+                                                    <segment title=""/>
+                                                </segments>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </segmentedControl>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="Pus-hs-iHG" secondAttribute="trailing" constant="16" id="In0-DS-1WQ"/>
+                                            <constraint firstItem="Pus-hs-iHG" firstAttribute="centerY" secondItem="9qv-JE-mdY" secondAttribute="centerY" id="b1J-ek-Yxq"/>
+                                            <constraint firstItem="Pus-hs-iHG" firstAttribute="leading" secondItem="9qv-JE-mdY" secondAttribute="leading" constant="16" id="hKM-1P-M47"/>
+                                        </constraints>
+                                    </view>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="IVy-4Q-9bj">
+                                        <rect key="frame" x="0.0" y="65" width="393" height="694"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </tableView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="lTA-lt-XwI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="7fk-TV-lsC"/>
+                            <constraint firstItem="lTA-lt-XwI" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="C9i-4k-7FZ"/>
+                            <constraint firstItem="lTA-lt-XwI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="HoW-m5-JF9"/>
+                            <constraint firstItem="lTA-lt-XwI" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="Osu-X5-Mlr"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

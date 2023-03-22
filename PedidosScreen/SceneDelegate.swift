@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         //let viewController = ViewController()
-        let navigationController = UINavigationController(rootViewController: HistoricoTableViewController())
+        let navigationController = UINavigationController(rootViewController: HistoricoViewController())
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
