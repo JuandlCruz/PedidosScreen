@@ -54,10 +54,10 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         contentView.addSubview(stackView)
         
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: contentView.leadingAnchor, multiplier: 2),
-            stackView.topAnchor.constraint(equalToSystemSpacingBelow: contentView.topAnchor, multiplier: 4),
-            contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 2),
-            contentView.bottomAnchor.constraint(greaterThanOrEqualToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 4)
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.margenTabla16),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.margenTabla16),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.margenTabla32),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.margenTabla32)
         ])
         
         contentView.backgroundColor = UIColor.systemGray5

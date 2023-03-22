@@ -8,8 +8,11 @@
 import UIKit
 
 class HistoricoTableViewCell: UITableViewCell {
+    
     private enum Constants {
         static let margenTabla32 = 32.0
+        static let margenTabla48 = 48.0
+        static let margenTabla64 = 64.0
         static let margenTabla16 = 16.0
         static let paqueteLabelSize = 16.0
         static let clienteLabelSize = 32.0
@@ -23,43 +26,6 @@ class HistoricoTableViewCell: UITableViewCell {
         return label
     }()
     
-    //    let pedidoCortoLabel: UILabel = {
-    //        let label = UILabel()
-    //        label.translatesAutoresizingMaskIntoConstraints = false
-    //        label.font = UIFont.preferredFont(forTextStyle: .title1)
-    //        return label
-    //    }()
-    //
-    //    let pedidoLabel: UILabel = {
-    //        let label = UILabel()
-    //        label.translatesAutoresizingMaskIntoConstraints = false
-    //        label.font = UIFont.preferredFont(forTextStyle: .title1)
-    //        return label
-    //    }()
-    
-    //    let paqueteLabel: UILabel = {
-    //        let label = UILabel()
-    //        label.translatesAutoresizingMaskIntoConstraints = false
-    //        label.font = UIFont.preferredFont(forTextStyle: .title3)
-    //        return label
-    //    }()
-    //
-    //    let horaLabel: UILabel = {
-    //        let label = UILabel()
-    //        label.translatesAutoresizingMaskIntoConstraints = false
-    //        label.font = UIFont.preferredFont(forTextStyle: .title3)
-    //        return label
-    //    }()
-    //
-    //    let checkImageView: UIImageView = {
-    //        let imageView = UIImageView()
-    //        imageView.translatesAutoresizingMaskIntoConstraints = false
-    //        imageView.contentMode = .scaleAspectFit
-    //        return imageView
-    //    }()
-    
-    
-    
     let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +38,6 @@ class HistoricoTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
-        setupSeparator()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -90,19 +55,12 @@ class HistoricoTableViewCell: UITableViewCell {
             
             stackView.topAnchor.constraint(equalTo: clienteLabel.bottomAnchor, constant: Constants.margenTabla32),
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.margenTabla16),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.margenTabla16),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.margenTabla32)
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.margenTabla32),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.margenTabla48)
         ])
     }
     
-    private func setupSeparator() {
-        let separator = UIView(frame: CGRect(x: 0, y: bounds.height - 20, width: bounds.width, height: 20))
-        separator.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-        separator.backgroundColor = .systemGray5
-        contentView.addSubview(separator)
-    }
-    
-    func configure(with model: Cliente) {
+    func configurarCelda(with model: Cliente) {
         clienteLabel.text = "\(model.cliente)"
         
         for arrangedSubview in stackView.arrangedSubviews {
