@@ -9,39 +9,54 @@ import UIKit
 
 class HistoricoViewController: UIViewController {
     
+    private enum Constants {
+        static let segmentBgColor = UIColor(red: 27.0/255.0, green: 27.0/255.0, blue: 30.0/255.0, alpha: 1.0)
+        static let selectedSegmentBgColor = UIColor(red: 54.0/255.0, green: 51.0/255.0, blue: 48.0/255.0, alpha: 1.0)
+        static let segmentedViewHeight = 50.0
+        static let segmentedLT = 16.0
+    }
     
-    let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
+    private let tableView = UITableView()
     
-    let segmentedControl: UISegmentedControl = {
+    private let segmentedControl: UISegmentedControl = {
         let segmented = UISegmentedControl(items: ["HOY", "-2D", "-3D", "1S"])
         segmented.selectedSegmentIndex = 0
         segmented.layer.cornerRadius = 5.0
-        segmented.backgroundColor = .black
-        segmented.selectedSegmentTintColor = .darkGray
+        segmented.backgroundColor = Constants.segmentBgColor
+        segmented.selectedSegmentTintColor = Constants.selectedSegmentBgColor
         segmented.tintColor = .white
         segmented.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
         segmented.translatesAutoresizingMaskIntoConstraints = false
         return segmented
     }()
     
-    let segmentedView: UIView = {
+    private let segmentedView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let tableView = UITableView()
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return stackView
+    }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private func setupNavigationBar() {
+        self.title = ".19 Online"
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.backgroundColor = .black
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+    }
+    
+    private func setupViews() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(HistoricoTableViewCell.self, forCellReuseIdentifier: "HistoricoTableViewCell")
@@ -54,13 +69,13 @@ class HistoricoViewController: UIViewController {
         stackView.addArrangedSubview(tableView)
         view.addSubview(stackView)
         
-        segmentedView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        segmentedView.heightAnchor.constraint(equalToConstant: Constants.segmentedViewHeight).isActive = true
         
         NSLayoutConstraint.activate([
             segmentedControl.centerXAnchor.constraint(equalTo: segmentedView.centerXAnchor),
             segmentedControl.centerYAnchor.constraint(equalTo: segmentedView.centerYAnchor),
-            segmentedControl.leadingAnchor.constraint(equalTo: segmentedView.leadingAnchor, constant: 16),
-            segmentedControl.trailingAnchor.constraint(equalTo: segmentedView.trailingAnchor, constant: -16)
+            segmentedControl.leadingAnchor.constraint(equalTo: segmentedView.leadingAnchor, constant: Constants.segmentedLT),
+            segmentedControl.trailingAnchor.constraint(equalTo: segmentedView.trailingAnchor, constant: -Constants.segmentedLT)
         ])
         
         NSLayoutConstraint.activate([
@@ -71,72 +86,70 @@ class HistoricoViewController: UIViewController {
         ])
         
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange), for: .valueChanged)
-        filterAndReloadData()
-        setupNavigationBar()
     }
     
-    func setupNavigationBar() {
-        self.title = ".19 Online"
-        navigationController?.navigationBar.isHidden = false
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.backgroundColor = .black
-        navigationController?.navigationBar.barStyle = .black
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupViews()
+        filterAndReloadData()
+        setupNavigationBar()
     }
     
     var filteredHistoricos: [Historicos] = []
     
     func filterAndReloadData() {
-        // Filtrar los datos según la opción seleccionada en el UISegmentedControl
+        
+        let inputDateFormatter = DateFormatter()
+        inputDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        
+        let today = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+        let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
+        let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        
         switch segmentedControl.selectedSegmentIndex {
-        case 0: // "Hoy"
+        case 0:
             filteredHistoricos = historicos.filter { historico in
-                let inputDateFormatter = DateFormatter()
-                inputDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
                 let date = inputDateFormatter.date(from: historico.fecha)!
                 return Calendar.current.isDateInToday(date)
             }
-        case 1: // "-2D (dos días antes de hoy)"
-            let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+        case 1:
             filteredHistoricos = historicos.filter { historico in
-                let inputDateFormatter = DateFormatter()
-                inputDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
                 let date = inputDateFormatter.date(from: historico.fecha)!
-                return Calendar.current.isDate(date, inSameDayAs: twoDaysAgo)
+                return date <= today && date >= yesterday
             }
-        case 2: // "-3D (tres días antes de hoy)"
-            let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
+        case 2:
             filteredHistoricos = historicos.filter { historico in
-                let inputDateFormatter = DateFormatter()
-                inputDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
                 let date = inputDateFormatter.date(from: historico.fecha)!
-                return Calendar.current.isDate(date, inSameDayAs: threeDaysAgo)
+                return date <= today && date >= twoDaysAgo
             }
-        case 3: // "1S (hace una semana)"
-            let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-            let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+        case 3:
             filteredHistoricos = historicos.filter { historico in
-                let inputDateFormatter = DateFormatter()
-                inputDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
                 let date = inputDateFormatter.date(from: historico.fecha)!
-                return date >= oneWeekAgo && date <= twoDaysAgo
+                return date <= today && date >= oneWeekAgo
             }
         default:
             fatalError("Invalid segmented control index")
         }
-        tableView.reloadData()
     }
 
-    
     @objc func segmentedControlDidChange(_ sender: UISegmentedControl) {
         filterAndReloadData()
+        tableView.reloadData()
+        tableView.layoutIfNeeded()
+        
+        if segmentedControl.selectedSegmentIndex == 0 {
+            tableView.contentOffset.y = 30
+        } else {
+            tableView.contentOffset.y = 0
+        }
     }
-
 }
 
+// MARK: - TABLA
 extension HistoricoViewController: UITableViewDelegate, UITableViewDataSource {
 
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         if segmentedControl.selectedSegmentIndex == 0 {
             return 1
@@ -150,8 +163,10 @@ extension HistoricoViewController: UITableViewDelegate, UITableViewDataSource {
         headerView.configure(fecha: filteredHistoricos[section].fecha, clientes: filteredHistoricos[section].cliente.count)
         
         if segmentedControl.selectedSegmentIndex == 0 {
+            tableView.contentInset.top = -30
             return nil
         } else {
+            tableView.contentInset.top = 0
             return headerView
         }
     }
@@ -165,21 +180,9 @@ extension HistoricoViewController: UITableViewDelegate, UITableViewDataSource {
         
         let cliente = filteredHistoricos[indexPath.section].cliente[indexPath.row]
         cell.configurarCelda(with: cliente)
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let lastRowIndex = tableView.numberOfRows(inSection: indexPath.section) - 1
-        let separatorTag = 1000
-        if indexPath.row != lastRowIndex {
-            let separator = UIView(frame: CGRect(x: 0, y: cell.bounds.height - 15, width: cell.bounds.width, height: 15))
-            separator.tag = separatorTag
-            separator.autoresizingMask = [.flexibleWidth, .flexibleTopMargin, .flexibleHeight]
-            separator.backgroundColor = .systemGray5
-            cell.addSubview(separator)
-        } else {
-            cell.viewWithTag(separatorTag)?.removeFromSuperview()
-        }
+        let shouldShowSeparator = indexPath.row != lastRowIndex
+        cell.configurarSeparador(show: shouldShowSeparator)
+        return cell
     }
 }

@@ -16,7 +16,6 @@
 		0B7A65B129C3118A00A25AAC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B7A65AF29C3118A00A25AAC /* LaunchScreen.storyboard */; };
 		0BF1D2D729C87E8400EE6C69 /* HistoricoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1D2D629C87E8400EE6C69 /* HistoricoTableViewCell.swift */; };
 		0BF1D2D929C884AE00EE6C69 /* HistoricoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1D2D829C884AE00EE6C69 /* HistoricoModel.swift */; };
-		0BF1D2DB29C88ABF00EE6C69 /* HistoricoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1D2DA29C88ABF00EE6C69 /* HistoricoTableViewController.swift */; };
 		0D8A8E8529CB1F17008CE714 /* HistoricoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D8A8E8429CB1F17008CE714 /* HistoricoViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,7 +31,6 @@
 		0B7A65B229C3118A00A25AAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0BF1D2D629C87E8400EE6C69 /* HistoricoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricoTableViewCell.swift; sourceTree = "<group>"; };
 		0BF1D2D829C884AE00EE6C69 /* HistoricoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricoModel.swift; sourceTree = "<group>"; };
-		0BF1D2DA29C88ABF00EE6C69 /* HistoricoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricoTableViewController.swift; sourceTree = "<group>"; };
 		0D8A8E8429CB1F17008CE714 /* HistoricoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,7 +89,6 @@
 			children = (
 				0BF1D2D629C87E8400EE6C69 /* HistoricoTableViewCell.swift */,
 				0BF1D2D829C884AE00EE6C69 /* HistoricoModel.swift */,
-				0BF1D2DA29C88ABF00EE6C69 /* HistoricoTableViewController.swift */,
 				0B62F2A729C9C79500DB2B87 /* SectionHeaderView.swift */,
 				0D8A8E8429CB1F17008CE714 /* HistoricoViewController.swift */,
 			);
@@ -169,7 +166,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BF1D2DB29C88ABF00EE6C69 /* HistoricoTableViewController.swift in Sources */,
 				0BF1D2D929C884AE00EE6C69 /* HistoricoModel.swift in Sources */,
 				0B7A65A929C3118800A25AAC /* ViewController.swift in Sources */,
 				0D8A8E8529CB1F17008CE714 /* HistoricoViewController.swift in Sources */,
