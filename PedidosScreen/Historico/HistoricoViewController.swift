@@ -12,8 +12,9 @@ class HistoricoViewController: UIViewController {
     private enum Constants {
         static let segmentBgColor = UIColor(red: 27.0/255.0, green: 27.0/255.0, blue: 30.0/255.0, alpha: 1.0)
         static let selectedSegmentBgColor = UIColor(red: 54.0/255.0, green: 51.0/255.0, blue: 48.0/255.0, alpha: 1.0)
-        static let segmentedViewHeight = 50.0
-        static let segmentedLT = 16.0
+        static let segmentedViewHeight = 70.0
+        static let segmentedPadding = 16.0
+        static let todayOffset = 30.0
     }
     
     private let tableView = UITableView()
@@ -72,10 +73,10 @@ class HistoricoViewController: UIViewController {
         segmentedView.heightAnchor.constraint(equalToConstant: Constants.segmentedViewHeight).isActive = true
         
         NSLayoutConstraint.activate([
-            segmentedControl.centerXAnchor.constraint(equalTo: segmentedView.centerXAnchor),
-            segmentedControl.centerYAnchor.constraint(equalTo: segmentedView.centerYAnchor),
-            segmentedControl.leadingAnchor.constraint(equalTo: segmentedView.leadingAnchor, constant: Constants.segmentedLT),
-            segmentedControl.trailingAnchor.constraint(equalTo: segmentedView.trailingAnchor, constant: -Constants.segmentedLT)
+            segmentedControl.topAnchor.constraint(equalTo: segmentedView.topAnchor, constant: Constants.segmentedPadding),
+            segmentedControl.bottomAnchor.constraint(equalTo: segmentedView.bottomAnchor, constant: -Constants.segmentedPadding),
+            segmentedControl.leadingAnchor.constraint(equalTo: segmentedView.leadingAnchor, constant: Constants.segmentedPadding),
+            segmentedControl.trailingAnchor.constraint(equalTo: segmentedView.trailingAnchor, constant: -Constants.segmentedPadding)
         ])
         
         NSLayoutConstraint.activate([
@@ -140,7 +141,7 @@ class HistoricoViewController: UIViewController {
         tableView.layoutIfNeeded()
         
         if segmentedControl.selectedSegmentIndex == 0 {
-            tableView.contentOffset.y = 30
+            tableView.contentOffset.y = Constants.todayOffset
         } else {
             tableView.contentOffset.y = 0
         }
@@ -163,7 +164,7 @@ extension HistoricoViewController: UITableViewDelegate, UITableViewDataSource {
         headerView.configure(fecha: filteredHistoricos[section].fecha, clientes: filteredHistoricos[section].cliente.count)
         
         if segmentedControl.selectedSegmentIndex == 0 {
-            tableView.contentInset.top = -30
+            tableView.contentInset.top = -Constants.todayOffset
             return nil
         } else {
             tableView.contentInset.top = 0

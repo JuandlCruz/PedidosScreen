@@ -71,7 +71,6 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         outputDateFormatter.locale = Locale(identifier: "es_ES")
         if Calendar.current.isDateInToday(date) {
             outputDateFormatter.dateFormat = "'HOY', dd MMM"
-            //stackView.removeFromSuperview()
         } else {
             outputDateFormatter.dateFormat = "EEE, dd MMM"
         }
