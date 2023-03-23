@@ -108,7 +108,7 @@ class HistoricoViewController: UIViewController {
         let yesterday = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
         let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
         let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-        
+        setContentOffset()
         switch segmentedControl.selectedSegmentIndex {
         case 0:
             filteredHistoricos = historicos.filter { historico in
@@ -135,16 +135,20 @@ class HistoricoViewController: UIViewController {
         }
     }
 
-    @objc func segmentedControlDidChange(_ sender: UISegmentedControl) {
-        filterAndReloadData()
-        tableView.reloadData()
-        tableView.layoutIfNeeded()
-        
+    private func setContentOffset() {
         if segmentedControl.selectedSegmentIndex == 0 {
             tableView.contentOffset.y = Constants.todayOffset
         } else {
             tableView.contentOffset.y = 0
         }
+    }
+    
+    @objc func segmentedControlDidChange(_ sender: UISegmentedControl) {
+        filterAndReloadData()
+        tableView.reloadData()
+        tableView.layoutIfNeeded()
+        
+        setContentOffset()
     }
 }
 
