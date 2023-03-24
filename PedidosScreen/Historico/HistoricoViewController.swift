@@ -17,6 +17,8 @@ class HistoricoViewController: UIViewController {
         static let todayOffset = 30.0
     }
     
+    
+    
     private let tableView = UITableView()
     
     private let segmentedControl: UISegmentedControl = {
@@ -38,13 +40,36 @@ class HistoricoViewController: UIViewController {
         return view
     }()
     
+    let entregadosLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 50, weight: .light)
+        label.isUserInteractionEnabled = true
+        return label
+    }()
+    
+    let consultadosLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 50, weight: .light)
+        label.isUserInteractionEnabled = true
+        return label
+    }()
+    
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fill
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
+        return stackView
+    }()
+    
+    private let stackViewPaquetes: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.backgroundColor = .green
+        stackView.distribution = .fill
         return stackView
     }()
     
@@ -67,8 +92,18 @@ class HistoricoViewController: UIViewController {
         
         segmentedView.addSubview(segmentedControl)
         stackView.addArrangedSubview(segmentedView)
+        stackView.addArrangedSubview(stackViewPaquetes)
+        stackViewPaquetes.addArrangedSubview(entregadosLabel)
+        stackViewPaquetes.addArrangedSubview(consultadosLabel)
         stackView.addArrangedSubview(tableView)
         view.addSubview(stackView)
+        
+        
+        let entregadosTapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler))
+        entregadosLabel.addGestureRecognizer(entregadosTapGesture)
+        
+        let consultadosTapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler))
+        consultadosLabel.addGestureRecognizer(consultadosTapGesture)
         
         segmentedView.heightAnchor.constraint(equalToConstant: Constants.segmentedViewHeight).isActive = true
         
@@ -91,16 +126,17 @@ class HistoricoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupViews()
         filterAndReloadData()
         setupNavigationBar()
     }
     
     var filteredHistoricos: [Historicos] = []
+    var filteredHistoricosEntregados: [Historicos] = []
+    var filteredHistoricosConsultados: [Historicos] = []
+    var historicosOriginales: [Historicos] = []
     
     func filterAndReloadData() {
-        
         let inputDateFormatter = DateFormatter()
         inputDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         
@@ -133,8 +169,17 @@ class HistoricoViewController: UIViewController {
         default:
             fatalError("Invalid segmented control index")
         }
+        
+        historicosOriginales = filteredHistoricos
+        
+        filteredHistoricosEntregados = filtrarHistoricos(filteredHistoricos, entregado: true)
+        filteredHistoricosConsultados = filtrarHistoricos(filteredHistoricos, entregado: false)
+        
+        entregadosLabel.text = String(totalPaquetes(historico: filteredHistoricos, entregado: true))
+        consultadosLabel.text = String(totalPaquetes(historico: filteredHistoricos, entregado: false))
+        
     }
-
+    
     private func setContentOffset() {
         if segmentedControl.selectedSegmentIndex == 0 {
             tableView.contentOffset.y = Constants.todayOffset
@@ -147,14 +192,82 @@ class HistoricoViewController: UIViewController {
         filterAndReloadData()
         tableView.reloadData()
         tableView.layoutIfNeeded()
-        
         setContentOffset()
     }
+    
+    
+    // MARK: - Filtrar por Todos, Entregados o Consultados
+    
+    func totalPaquetes(historico: [Historicos], entregado: Bool) -> Int {
+        return historico.reduce(0) { total, historico in
+            let paquetesNoEntregados = historico.cliente.flatMap { cliente in
+                cliente.pedidos.flatMap { pedido in
+                    pedido.paquetes.filter { paquete in
+                        return paquete.entregado == entregado
+                    }
+                }
+            }
+            return total + paquetesNoEntregados.count
+        }
+    }
+    
+    var filtroActual: String = "Todos"
+    @objc func tapGestureHandler(sender: UITapGestureRecognizer) {
+        if sender.view == entregadosLabel {
+            if filtroActual == "Entregados" {
+                filtroActual = "Todos"
+                actualizarTablaConHistoricos(historicosOriginales)
+            } else {
+                actualizarTablaConHistoricos(filteredHistoricosEntregados)
+                filtroActual = "Entregados"
+            }
+        } else if sender.view == consultadosLabel {
+            if filtroActual == "Consultados" {
+                filtroActual = "Todos"
+                actualizarTablaConHistoricos(historicosOriginales)
+            } else {
+                actualizarTablaConHistoricos(filteredHistoricosConsultados)
+                filtroActual = "Consultados"
+            }
+        }
+    }
+    
+    func actualizarTablaConHistoricos(_ historicos: [Historicos]) {
+        filteredHistoricos = historicos
+        tableView.reloadData()
+        tableView.layoutIfNeeded()
+        setContentOffset()
+    }
+    
+    func filtrarHistoricos(_ historicos: [Historicos], entregado: Bool) -> [Historicos] {
+        return historicos.map { historico in
+            let clientesFiltrados = historico.cliente.map { cliente in
+                let pedidosFiltrados = cliente.pedidos.filter { pedido in
+                    let paquetesFiltrados = pedido.paquetes.filter { paquete in
+                        return paquete.entregado == entregado
+                    }
+                    return !paquetesFiltrados.isEmpty
+                }.map { pedido in
+                    let paquetesFiltrados = pedido.paquetes.filter { paquete in
+                        return paquete.entregado == entregado
+                    }
+                    return Pedido(numPedido: pedido.numPedido, paquetes: paquetesFiltrados)
+                }
+                return Cliente(cliente: cliente.cliente, pedidos: pedidosFiltrados)
+            }.filter { cliente in
+                return !cliente.pedidos.isEmpty
+            }
+            return Historicos(fecha: historico.fecha, cliente: clientesFiltrados)
+        }.filter { historico in
+            return !historico.cliente.isEmpty
+        }
+    }
+    
 }
 
 // MARK: - TABLA
 extension HistoricoViewController: UITableViewDelegate, UITableViewDataSource {
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         if segmentedControl.selectedSegmentIndex == 0 {
             return 1
@@ -164,20 +277,23 @@ extension HistoricoViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = SectionHeaderView(reuseIdentifier: "SectionHeaderView")
-        headerView.configure(fecha: filteredHistoricos[section].fecha, clientes: filteredHistoricos[section].cliente.count)
-        
         if segmentedControl.selectedSegmentIndex == 0 {
             tableView.contentInset.top = -Constants.todayOffset
             return nil
         } else {
+            let headerView = SectionHeaderView(reuseIdentifier: "SectionHeaderView")
+            headerView.configure(fecha: filteredHistoricos[section].fecha, clientes: filteredHistoricos[section].cliente.count)
             tableView.contentInset.top = 0
             return headerView
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredHistoricos[section].cliente.count
+        if filteredHistoricos.isEmpty {
+            return 0
+        } else {
+            return filteredHistoricos[section].cliente.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

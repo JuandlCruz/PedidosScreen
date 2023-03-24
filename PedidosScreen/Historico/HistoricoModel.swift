@@ -30,6 +30,25 @@ struct Paquete {
 }
 
 let historicos: [Historicos] = [
+    Historicos(fecha: "2023-03-24 08:10:31 +0000",
+               cliente: [
+                Cliente(
+                    cliente: "Javier González",
+                    pedidos: [Pedido(numPedido: 98345221380,
+                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-24 11:00:00 +0000", entregado: true)])]),
+                Cliente(
+                    cliente: "Jose Gutierrez",
+                    pedidos: [Pedido(numPedido: 98345221387,
+                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-24 11:00:00 +0000", entregado: false),
+                                                Paquete(paquete: "21001311673400103456", hora: "2023-03-24 11:00:00 +0000", entregado: true)])]),
+                Cliente(
+                    cliente: "Juan Fernandez",
+                    pedidos: [Pedido(numPedido: 98345221393,
+                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-24 11:00:00 +0000", entregado: true),
+                                                Paquete(paquete: "21001311673400103456", hora: "2023-03-24 11:00:00 +0000", entregado: true)]),
+                              Pedido(numPedido: 98345221398,
+                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-24 11:00:00 +0000", entregado: false)])])
+               ]),
     Historicos(fecha: "2023-03-23 08:10:31 +0000",
                cliente: [
                 Cliente(
@@ -39,7 +58,7 @@ let historicos: [Historicos] = [
                 Cliente(
                     cliente: "Jose Gutierrez",
                     pedidos: [Pedido(numPedido: 98345221387,
-                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-23 11:00:00 +0000", entregado: true),
+                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-23 11:00:00 +0000", entregado: false),
                                                 Paquete(paquete: "21001311673400103456", hora: "2023-03-23 11:00:00 +0000", entregado: true)])]),
                 Cliente(
                     cliente: "Juan Fernandez",
@@ -47,7 +66,7 @@ let historicos: [Historicos] = [
                                      paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-23 11:00:00 +0000", entregado: true),
                                                 Paquete(paquete: "21001311673400103456", hora: "2023-03-23 11:00:00 +0000", entregado: true)]),
                               Pedido(numPedido: 98345221398,
-                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-23 11:00:00 +0000", entregado: true)])])
+                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-23 11:00:00 +0000", entregado: false)])])
                ]),
     Historicos(fecha: "2023-03-22 08:10:31 +0000",
                cliente: [
@@ -65,13 +84,13 @@ let historicos: [Historicos] = [
                 Cliente(
                     cliente: "María Cristina Toledo",
                     pedidos: [Pedido(numPedido: 98345221387,
-                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-21 11:00:00 +0000", entregado: true),
-                                                Paquete(paquete: "21001311673400103456", hora: "2023-03-21 11:00:00 +0000", entregado: true)])]),
+                                     paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-21 11:00:00 +0000", entregado: false),
+                                                Paquete(paquete: "21001311673400103456", hora: "2023-03-21 11:00:00 +0000", entregado: false)])]),
                 Cliente(
                     cliente: "Marifer Gutierrez",
                     pedidos: [Pedido(numPedido: 98345221393,
                                      paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-21 11:00:00 +0000", entregado: true),
-                                                Paquete(paquete: "21001311673400103456", hora: "2023-03-21 11:00:00 +0000", entregado: true)]),
+                                                Paquete(paquete: "21001311673400103456", hora: "2023-03-21 11:00:00 +0000", entregado: false)]),
                               Pedido(numPedido: 98345221398,
                                      paquetes: [Paquete(paquete: "21001311673400103456", hora: "2023-03-21 11:00:00 +0000", entregado: true)])])
                ]),

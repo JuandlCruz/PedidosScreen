@@ -127,8 +127,8 @@ class HistoricoTableViewCell: UITableViewCell {
         
         checkImageView.translatesAutoresizingMaskIntoConstraints = false
         checkImageView.contentMode = .scaleAspectFit
-        checkImageView.image = paquete.entregado ? UIImage(systemName: "checkmark") : UIImage(systemName: "multiply")
-        checkImageView.tintColor = paquete.entregado ? .systemGreen : .systemRed
+        checkImageView.image = paquete.entregado ? UIImage(systemName: "checkmark") : UIImage(systemName: "eye")
+        checkImageView.tintColor = paquete.entregado ? .systemGreen : .systemBlue
         
         row.addSubview(paqueteLabel)
         row.addSubview(horaLabel)
