@@ -19,6 +19,9 @@ class HistoricoViewController: UIViewController {
         static let segmentedViewHeight = 70.0
         static let segmentedPadding = 16.0
         static let todayOffset = 30.0
+        static let labelTopSize = 15.0
+        static let labelNumberSize = 80.0
+        static let labelTodaySize = 12.0
     }
     
     private let tableView = UITableView()
@@ -46,14 +49,14 @@ class HistoricoViewController: UIViewController {
         let label = UILabel()
         label.text = "•ENTREGADO"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 15, weight: .light)
+        label.font = UIFont.systemFont(ofSize: Constants.labelTopSize, weight: .light)
         return label
     }()
     
     let entregadosNum: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 80, weight: .light)
+        label.font = UIFont.systemFont(ofSize: Constants.labelNumberSize, weight: .light)
         return label
     }()
     
@@ -71,7 +74,7 @@ class HistoricoViewController: UIViewController {
         let label = UILabel()
         label.text = "•CONSULTADO"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 15, weight: .light)
+        label.font = UIFont.systemFont(ofSize: Constants.labelTopSize, weight: .light)
         label.isUserInteractionEnabled = true
         return label
     }()
@@ -80,7 +83,7 @@ class HistoricoViewController: UIViewController {
         let label = UILabel()
         label.textAlignment = .right
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 80, weight: .light)
+        label.font = UIFont.systemFont(ofSize: Constants.labelNumberSize, weight: .light)
         return label
     }()
     
@@ -115,7 +118,7 @@ class HistoricoViewController: UIViewController {
     
     let fechaHoyLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        label.font = UIFont.systemFont(ofSize: Constants.labelTodaySize, weight: .light)
         let outputDateFormatter = DateFormatter()
         outputDateFormatter.locale = Locale(identifier: "es_ES")
         outputDateFormatter.dateFormat = "dd MMM YYYY"
@@ -142,7 +145,7 @@ class HistoricoViewController: UIViewController {
         stackView.backgroundColor = .black
         stackView.distribution = .fill
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: Constants.segmentedPadding, leading: Constants.segmentedPadding, bottom: 32, trailing: Constants.segmentedPadding)
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: Constants.segmentedPadding, leading: Constants.segmentedPadding, bottom: Constants.segmentedPadding * 2, trailing: Constants.segmentedPadding)
         return stackView
     }()
     
@@ -179,8 +182,6 @@ class HistoricoViewController: UIViewController {
         let consultadosTapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler))
         consultadosStackView.addGestureRecognizer(consultadosTapGesture)
         
-        segmentedView.heightAnchor.constraint(equalToConstant: Constants.segmentedViewHeight).isActive = true
-        
         NSLayoutConstraint.activate([
             segmentedControl.topAnchor.constraint(equalTo: segmentedView.topAnchor, constant: Constants.segmentedPadding),
             segmentedControl.bottomAnchor.constraint(equalTo: segmentedView.bottomAnchor, constant: -Constants.segmentedPadding),
@@ -195,6 +196,7 @@ class HistoricoViewController: UIViewController {
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+        segmentedView.heightAnchor.constraint(equalToConstant: Constants.segmentedViewHeight).isActive = true
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange), for: .valueChanged)
     }
     
@@ -260,9 +262,7 @@ class HistoricoViewController: UIViewController {
         
         if total != 0 {
             let porcentaje = (Float(entregados) / total)
-            //progressBar.setProgress(porcentaje, animated: false)
             progressBar.progress = porcentaje
-            print(porcentaje)
         } else {
             progressBar.progress = 0
         }
@@ -304,20 +304,33 @@ class HistoricoViewController: UIViewController {
     }
     
     var filtroActual: String = "Todos"
+    
+    fileprivate func soloEntregados() {
+        entregadosStackView.alpha = 1
+        consultadosStackView.alpha = 0.4
+        progressBar.backgroundColor = Constants.consultadosBgColorInactivo
+        progressBar.tintColor = Constants.entregadosBgColorActivo
+    }
+    
+    fileprivate func todoVisible() {
+        consultadosStackView.alpha = 1
+        entregadosStackView.alpha = 1
+        progressBar.backgroundColor = Constants.consultadosBgColorActivo
+        progressBar.tintColor = Constants.entregadosBgColorActivo
+    }
+    
+    fileprivate func soloConsultados() {
+        consultadosStackView.alpha = 1
+        entregadosStackView.alpha = 0.4
+        progressBar.backgroundColor = Constants.consultadosBgColorActivo
+        progressBar.tintColor = Constants.entregadosBgColorInactivo
+    }
+    
     @objc func tapGestureHandler(sender: UITapGestureRecognizer) {
         if sender.view == entregadosStackView {
-            
-            entregadosStackView.alpha = 1
-            consultadosStackView.alpha = 0.4
-            progressBar.backgroundColor = Constants.consultadosBgColorInactivo
-            progressBar.tintColor = Constants.entregadosBgColorActivo
-            
+            soloEntregados()
             if filtroActual == "Entregados" {
-                
-                consultadosStackView.alpha = 1
-                progressBar.backgroundColor = Constants.consultadosBgColorActivo
-                progressBar.tintColor = Constants.entregadosBgColorActivo
-                
+                todoVisible()
                 filtroActual = "Todos"
                 actualizarTablaConHistoricos(historicosOriginales)
             } else {
@@ -325,18 +338,9 @@ class HistoricoViewController: UIViewController {
                 filtroActual = "Entregados"
             }
         } else if sender.view == consultadosStackView {
-            
-            consultadosStackView.alpha = 1
-            entregadosStackView.alpha = 0.4
-            progressBar.backgroundColor = Constants.consultadosBgColorActivo
-            progressBar.tintColor = Constants.entregadosBgColorInactivo
-            
+            soloConsultados()
             if filtroActual == "Consultados" {
-                
-                entregadosStackView.alpha = 1
-                progressBar.backgroundColor = Constants.consultadosBgColorActivo
-                progressBar.tintColor = Constants.entregadosBgColorActivo
-                
+                todoVisible()
                 filtroActual = "Todos"
                 actualizarTablaConHistoricos(historicosOriginales)
             } else {
