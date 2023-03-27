@@ -12,6 +12,10 @@ class HistoricoViewController: UIViewController {
     private enum Constants {
         static let segmentBgColor = UIColor(red: 27.0/255.0, green: 27.0/255.0, blue: 30.0/255.0, alpha: 1.0)
         static let selectedSegmentBgColor = UIColor(red: 54.0/255.0, green: 51.0/255.0, blue: 48.0/255.0, alpha: 1.0)
+        static let entregadosBgColorActivo = UIColor(red: 105.0/255.0, green: 209.0/255.0, blue: 185.0/255.0, alpha: 1.0)
+        static let entregadosBgColorInactivo = UIColor(red: 26.0/255.0, green: 61.0/255.0, blue: 52.0/255.0, alpha: 1.0)
+        static let consultadosBgColorActivo = UIColor(red: 92.0/255.0, green: 119.0/255.0, blue: 251.0/255.0, alpha: 1.0)
+        static let consultadosBgColorInactivo = UIColor(red: 24.0/255.0, green: 33.0/255.0, blue: 73.0/255.0, alpha: 1.0)
         static let segmentedViewHeight = 70.0
         static let segmentedPadding = 16.0
         static let todayOffset = 30.0
@@ -106,8 +110,39 @@ class HistoricoViewController: UIViewController {
         stackView.alignment = .fill
         stackView.backgroundColor = .black
         stackView.distribution = .fill
+        return stackView
+    }()
+    
+    let fechaHoyLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        let outputDateFormatter = DateFormatter()
+        outputDateFormatter.locale = Locale(identifier: "es_ES")
+        outputDateFormatter.dateFormat = "dd MMM YYYY"
+        let formattedDate = outputDateFormatter.string(from: Date())
+        label.text = formattedDate
+        return label
+    }()
+    
+    private let progressBar: UIProgressView = {
+        let progressView = UIProgressView()
+        progressView.progressViewStyle = .bar
+        progressView.backgroundColor = Constants.consultadosBgColorActivo
+        progressView.tintColor = Constants.entregadosBgColorActivo
+        progressView.transform = progressView.transform.scaledBy(x: 1, y: 3)
+        progressView.layer.cornerRadius = 5
+        progressView.clipsToBounds = true
+        return progressView
+    }()
+    
+    private lazy var stackViewPaquetesView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [stackViewPaquetes, progressBar, fechaHoyLabel])
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.backgroundColor = .black
+        stackView.distribution = .fill
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: Constants.segmentedPadding, leading: Constants.segmentedPadding, bottom: Constants.segmentedPadding, trailing: Constants.segmentedPadding)
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: Constants.segmentedPadding, leading: Constants.segmentedPadding, bottom: 32, trailing: Constants.segmentedPadding)
         return stackView
     }()
     
@@ -130,12 +165,13 @@ class HistoricoViewController: UIViewController {
         
         segmentedView.addSubview(segmentedControl)
         stackView.addArrangedSubview(segmentedView)
-        stackView.addArrangedSubview(stackViewPaquetes)
+        stackView.addArrangedSubview(stackViewPaquetesView)
         stackViewPaquetes.addArrangedSubview(entregadosStackView)
         stackViewPaquetes.addArrangedSubview(consultadosStackView)
+        stackViewPaquetesView.setCustomSpacing(16.0, after: stackViewPaquetes)
+        stackViewPaquetesView.setCustomSpacing(16.0, after: progressBar)
         stackView.addArrangedSubview(tableView)
         view.addSubview(stackView)
-        
         
         let entregadosTapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler))
         entregadosStackView.addGestureRecognizer(entregadosTapGesture)
@@ -214,16 +250,33 @@ class HistoricoViewController: UIViewController {
         filteredHistoricosEntregados = filtrarHistoricos(filteredHistoricos, entregado: true)
         filteredHistoricosConsultados = filtrarHistoricos(filteredHistoricos, entregado: false)
         
-        entregadosNum.text = String(totalPaquetes(historico: filteredHistoricos, entregado: true))
-        consultadosNum.text = String(totalPaquetes(historico: filteredHistoricos, entregado: false))
+        let entregados = totalPaquetes(historico: filteredHistoricos, entregado: true)
+        let consultados = totalPaquetes(historico: filteredHistoricos, entregado: false)
+        
+        entregadosNum.text = String(entregados)
+        consultadosNum.text = String(consultados)
+        
+        let total = Float(entregados + consultados)
+        
+        if total != 0 {
+            let porcentaje = (Float(entregados) / total)
+            //progressBar.setProgress(porcentaje, animated: false)
+            progressBar.progress = porcentaje
+            print(porcentaje)
+        } else {
+            progressBar.progress = 0
+        }
+        
         
     }
     
     private func setContentOffset() {
         if segmentedControl.selectedSegmentIndex == 0 {
             tableView.contentOffset.y = Constants.todayOffset
+            fechaHoyLabel.textColor = .lightGray
         } else {
             tableView.contentOffset.y = 0
+            fechaHoyLabel.textColor = .black
         }
     }
     
@@ -253,10 +306,18 @@ class HistoricoViewController: UIViewController {
     var filtroActual: String = "Todos"
     @objc func tapGestureHandler(sender: UITapGestureRecognizer) {
         if sender.view == entregadosStackView {
+            
             entregadosStackView.alpha = 1
             consultadosStackView.alpha = 0.4
+            progressBar.backgroundColor = Constants.consultadosBgColorInactivo
+            progressBar.tintColor = Constants.entregadosBgColorActivo
+            
             if filtroActual == "Entregados" {
+                
                 consultadosStackView.alpha = 1
+                progressBar.backgroundColor = Constants.consultadosBgColorActivo
+                progressBar.tintColor = Constants.entregadosBgColorActivo
+                
                 filtroActual = "Todos"
                 actualizarTablaConHistoricos(historicosOriginales)
             } else {
@@ -264,10 +325,18 @@ class HistoricoViewController: UIViewController {
                 filtroActual = "Entregados"
             }
         } else if sender.view == consultadosStackView {
+            
             consultadosStackView.alpha = 1
             entregadosStackView.alpha = 0.4
+            progressBar.backgroundColor = Constants.consultadosBgColorActivo
+            progressBar.tintColor = Constants.entregadosBgColorInactivo
+            
             if filtroActual == "Consultados" {
+                
                 entregadosStackView.alpha = 1
+                progressBar.backgroundColor = Constants.consultadosBgColorActivo
+                progressBar.tintColor = Constants.entregadosBgColorActivo
+                
                 filtroActual = "Todos"
                 actualizarTablaConHistoricos(historicosOriginales)
             } else {
