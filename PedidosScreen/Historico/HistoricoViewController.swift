@@ -17,8 +17,6 @@ class HistoricoViewController: UIViewController {
         static let todayOffset = 30.0
     }
     
-    
-    
     private let tableView = UITableView()
     
     private let segmentedControl: UISegmentedControl = {
@@ -42,16 +40,54 @@ class HistoricoViewController: UIViewController {
     
     let entregadosLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 50, weight: .light)
-        label.isUserInteractionEnabled = true
+        label.text = "•ENTREGADO"
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 15, weight: .light)
         return label
+    }()
+    
+    let entregadosNum: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 80, weight: .light)
+        return label
+    }()
+    
+    private lazy var entregadosStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [entregadosLabel, entregadosNum])
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isUserInteractionEnabled = true
+        return stackView
     }()
     
     let consultadosLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 50, weight: .light)
+        label.text = "•CONSULTADO"
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 15, weight: .light)
         label.isUserInteractionEnabled = true
         return label
+    }()
+    
+    let consultadosNum: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .right
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 80, weight: .light)
+        return label
+    }()
+    
+    private lazy var consultadosStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [consultadosLabel, consultadosNum])
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isUserInteractionEnabled = true
+        return stackView
     }()
     
     private let stackView: UIStackView = {
@@ -68,8 +104,10 @@ class HistoricoViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .fill
-        stackView.backgroundColor = .green
+        stackView.backgroundColor = .black
         stackView.distribution = .fill
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: Constants.segmentedPadding, leading: Constants.segmentedPadding, bottom: Constants.segmentedPadding, trailing: Constants.segmentedPadding)
         return stackView
     }()
     
@@ -93,17 +131,17 @@ class HistoricoViewController: UIViewController {
         segmentedView.addSubview(segmentedControl)
         stackView.addArrangedSubview(segmentedView)
         stackView.addArrangedSubview(stackViewPaquetes)
-        stackViewPaquetes.addArrangedSubview(entregadosLabel)
-        stackViewPaquetes.addArrangedSubview(consultadosLabel)
+        stackViewPaquetes.addArrangedSubview(entregadosStackView)
+        stackViewPaquetes.addArrangedSubview(consultadosStackView)
         stackView.addArrangedSubview(tableView)
         view.addSubview(stackView)
         
         
         let entregadosTapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler))
-        entregadosLabel.addGestureRecognizer(entregadosTapGesture)
+        entregadosStackView.addGestureRecognizer(entregadosTapGesture)
         
         let consultadosTapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler))
-        consultadosLabel.addGestureRecognizer(consultadosTapGesture)
+        consultadosStackView.addGestureRecognizer(consultadosTapGesture)
         
         segmentedView.heightAnchor.constraint(equalToConstant: Constants.segmentedViewHeight).isActive = true
         
@@ -145,6 +183,7 @@ class HistoricoViewController: UIViewController {
         let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
         let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         setContentOffset()
+        
         switch segmentedControl.selectedSegmentIndex {
         case 0:
             filteredHistoricos = historicos.filter { historico in
@@ -175,8 +214,8 @@ class HistoricoViewController: UIViewController {
         filteredHistoricosEntregados = filtrarHistoricos(filteredHistoricos, entregado: true)
         filteredHistoricosConsultados = filtrarHistoricos(filteredHistoricos, entregado: false)
         
-        entregadosLabel.text = String(totalPaquetes(historico: filteredHistoricos, entregado: true))
-        consultadosLabel.text = String(totalPaquetes(historico: filteredHistoricos, entregado: false))
+        entregadosNum.text = String(totalPaquetes(historico: filteredHistoricos, entregado: true))
+        consultadosNum.text = String(totalPaquetes(historico: filteredHistoricos, entregado: false))
         
     }
     
@@ -213,16 +252,22 @@ class HistoricoViewController: UIViewController {
     
     var filtroActual: String = "Todos"
     @objc func tapGestureHandler(sender: UITapGestureRecognizer) {
-        if sender.view == entregadosLabel {
+        if sender.view == entregadosStackView {
+            entregadosStackView.alpha = 1
+            consultadosStackView.alpha = 0.4
             if filtroActual == "Entregados" {
+                consultadosStackView.alpha = 1
                 filtroActual = "Todos"
                 actualizarTablaConHistoricos(historicosOriginales)
             } else {
                 actualizarTablaConHistoricos(filteredHistoricosEntregados)
                 filtroActual = "Entregados"
             }
-        } else if sender.view == consultadosLabel {
+        } else if sender.view == consultadosStackView {
+            consultadosStackView.alpha = 1
+            entregadosStackView.alpha = 0.4
             if filtroActual == "Consultados" {
+                entregadosStackView.alpha = 1
                 filtroActual = "Todos"
                 actualizarTablaConHistoricos(historicosOriginales)
             } else {
